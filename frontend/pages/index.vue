@@ -25,7 +25,9 @@
     </div>
 
     <!-- Tasks List -->
-    <div v-if="loading && tasks.length === 0" class="state-message">Загрузка задач...</div>
+    <div v-if="loading && tasks.length === 0" class="state-message">
+      Загрузка задач...
+    </div>
     <div v-else-if="tasks.length === 0" class="surface state-message">
       <p>Задачи не найдены.</p>
     </div>
@@ -41,11 +43,11 @@
     </div>
 
     <!-- Pagination -->
-    <div v-if="totalPages > 1" class="pagination">
-      <button class="btn btn-outline" :disabled="currentPage === 1" @click="changePage(currentPage - 1)">Назад</button>
-      <span class="pagination-info">Страница {{ currentPage }} из {{ totalPages }}</span>
-      <button class="btn btn-outline" :disabled="currentPage === totalPages" @click="changePage(currentPage + 1)">Вперед</button>
-    </div>
+    <TaskPagination 
+      :current-page="currentPage" 
+      :total-pages="totalPages" 
+      @change="changePage" 
+    />
 
     <TaskFormModal 
       v-if="isModalOpen" 
@@ -220,15 +222,5 @@ onMounted(async () => {
 }
 .ml-2 {
   margin-left: 0.5rem; /* Admin badge margin */
-}
-.pagination {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 1rem;
-  margin-top: 1.5rem;
-}
-.pagination-info {
-  color: var(--color-text-muted);
 }
 </style>
