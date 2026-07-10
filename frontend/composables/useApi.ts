@@ -1,11 +1,11 @@
 import { useRuntimeConfig, useCookie, navigateTo } from '#app';
-import type { FetchOptions } from 'ofetch';
+
 
 export const useApi = () => {
   const config = useRuntimeConfig();
   const token = useCookie('auth_token');
 
-  const fetch = async <T = unknown>(endpoint: string, options: FetchOptions = {}): Promise<T> => {
+  const fetch = async <T = unknown>(endpoint: string, options: Parameters<typeof $fetch>[1] = {}): Promise<T> => {
     const currentToken = useCookie('auth_token').value;
     const headers = new Headers(options.headers || {});
     
