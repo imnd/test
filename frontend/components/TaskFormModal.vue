@@ -105,10 +105,11 @@ const saveTask = async () => {
     }
     emit('saved');
     emit('close');
-  } catch (e: any) {
-    if (e.response && e.response.status === 422) {
-      errors.value = e.response._data.errors;
-    } else if (e.response?.status === 403) {
+  } catch (e: unknown) {
+    const err = e as { response?: { status: number; _data?: { errors: Record<string, string[]> } } };
+    if (err.response && err.response.status === 422) {
+      errors.value = err.response._data?.errors || {};
+    } else if (err.response?.status === 403) {
       alert('У вас нет прав для сохранения этой задачи.');
     } else {
       alert('Произошла ошибка при сохранении. Попробуйте позже.');

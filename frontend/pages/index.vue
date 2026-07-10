@@ -165,8 +165,9 @@ const deleteTask = async (id: number) => {
   try {
     await api.fetch(`/tasks/${id}`, { method: 'DELETE' });
     tasks.value = tasks.value.filter(t => t.id !== id);
-  } catch (e: any) {
-    if (e.response?.status === 403) {
+  } catch (e: unknown) {
+    const err = e as { response?: { status: number } };
+    if (err.response?.status === 403) {
       alert('У вас нет прав для удаления этой задачи.');
     } else {
       alert('Ошибка при удалении. Попробуйте позже.');

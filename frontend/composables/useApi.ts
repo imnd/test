@@ -1,10 +1,11 @@
 import { useRuntimeConfig, useCookie, navigateTo } from '#app';
+import type { FetchOptions } from 'ofetch';
 
 export const useApi = () => {
   const config = useRuntimeConfig();
   const token = useCookie('auth_token');
 
-  const fetch = async <T = any>(endpoint: string, options: any = {}): Promise<T> => {
+  const fetch = async <T = unknown>(endpoint: string, options: FetchOptions = {}): Promise<T> => {
     const currentToken = useCookie('auth_token').value;
     const headers = new Headers(options.headers || {});
     
@@ -18,8 +19,9 @@ export const useApi = () => {
         ...options,
         headers,
       });
-    } catch (error: any) {
-      if (error.response?.status === 401) {
+    } catch (error: unknown) {
+      const err = error as { response?: { status: number } };
+      if (err.response?.status === 401) {
         token.value = null;
         if (process.client) {
           navigateTo('/login');

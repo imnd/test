@@ -7,7 +7,7 @@ export const useAuth = () => {
   const token = useCookie('auth_token');
   const api = useApi();
 
-  const login = async (credentials: any) => {
+  const login = async (credentials: Record<string, string>) => {
     try {
       const response = await api.fetch<AuthResponse>('/auth/login', {
         method: 'POST',
@@ -17,8 +17,9 @@ export const useAuth = () => {
       await fetchUser();
       navigateTo('/');
       return { success: true };
-    } catch (error: any) {
-      return { success: false, errors: error.response?._data?.errors || { message: ['Ошибка авторизации'] } };
+    } catch (error: unknown) {
+      const err = error as { response?: { _data?: { errors: Record<string, string[]> } } };
+      return { success: false, errors: err.response?._data?.errors || { message: ['Ошибка авторизации'] } };
     }
   };
 
