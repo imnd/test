@@ -75,19 +75,19 @@ const router = useRouter();
 const tasks = ref<Task[]>([]);
 const loading = ref(true);
 
-const search = ref(route.query.search || '');
-const statusFilter = ref(route.query.status || '');
+const search = ref<string>((route.query.search as string) || '');
+const statusFilter = ref<string>((route.query.status as string) || '');
 
 const validSorts = ['created_at-desc', 'created_at-asc', 'due_date-asc', 'due_date-desc'];
-const initialSort = route.query.sort ? `${route.query.sort}-${route.query.dir}` : 'created_at-desc';
-const sortBy = ref(validSorts.includes(initialSort) ? initialSort : 'created_at-desc');
+const initialSort = route.query.sort ? `${route.query.sort as string}-${route.query.dir as string}` : 'created_at-desc';
+const sortBy = ref<string>(validSorts.includes(initialSort) ? initialSort : 'created_at-desc');
 
 const isModalOpen = ref(false);
 const editingTask = ref<Task | null>(null);
 
 let searchTimeout: ReturnType<typeof setTimeout> | null = null;
 
-const currentPage = ref(Number(route.query.page) || 1);
+const currentPage = ref<number>(Number(route.query.page) || 1);
 const totalPages = ref(1);
 
 const changePage = (page: number) => {
