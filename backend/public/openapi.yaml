@@ -1,0 +1,217 @@
+openapi: 3.0.3
+info:
+  title: To-Do List API
+  version: 1.0.0
+  description: API documentation for the To-Do List Application.
+servers:
+  - url: http://localhost:8000/api
+    description: Local development server
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: Sanctum
+  schemas:
+    Task:
+      type: object
+      properties:
+        id:
+          type: integer
+        user_id:
+          type: integer
+        title:
+          type: string
+        description:
+          type: string
+          nullable: true
+        status:
+          type: string
+          enum: [pending, in_progress, completed]
+        due_date:
+          type: string
+          format: date
+          nullable: true
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        email:
+          type: string
+        is_admin:
+          type: boolean
+security:
+  - bearerAuth: []
+paths:
+  /auth/login:
+    post:
+      summary: Login user and issue a token
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - email
+                - password
+              properties:
+                email:
+                  type: string
+                  format: email
+                password:
+                  type: string
+      responses:
+        '200':
+          description: Successful login
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  access_token:
+                    type: string
+                  token_type:
+                    type: string
+        '422':
+          description: Validation error
+  /auth/logout:
+    post:
+      summary: Logout user and revoke token
+      responses:
+        '200':
+          description: Successful logout
+  /user:
+    get:
+      summary: Get current authenticated user
+      responses:
+        '200':
+          description: User profile
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+  /tasks:
+    get:
+      summary: Get a paginated list of tasks
+      parameters:
+        - name: search
+          in: query
+          schema:
+            type: string
+        - name: status
+          in: query
+          schema:
+            type: string
+            enum: [pending, in_progress, completed]
+        - name: sort
+          in: query
+          schema:
+            type: string
+            default: created_at
+        - name: dir
+          in: query
+          schema:
+            type: string
+            enum: [asc, desc]
+            default: desc
+        - name: page
+          in: query
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Paginated tasks
+    post:
+      summary: Create a new task
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - title
+              properties:
+                title:
+                  type: string
+                description:
+                  type: string
+                status:
+                  type: string
+                  enum: [pending, in_progress, completed]
+                due_date:
+                  type: string
+                  format: date
+      responses:
+        '201':
+          description: Task created
+        '422':
+          description: Validation error
+  /tasks/{task}:
+    parameters:
+      - name: task
+        in: path
+        required: true
+        schema:
+          type: integer
+    get:
+      summary: Get a specific task
+      responses:
+        '200':
+          description: Task object
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Task'
+        '403':
+          description: Forbidden
+        '404':
+          description: Not found
+    put:
+      summary: Update a task
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                description:
+                  type: string
+                status:
+                  type: string
+                  enum: [pending, in_progress, completed]
+                due_date:
+                  type: string
+                  format: date
+      responses:
+        '200':
+          description: Task updated
+        '403':
+          description: Forbidden
+        '404':
+          description: Not found
+        '422':
+          description: Validation error
+    delete:
+      summary: Delete a task
+      responses:
+        '204':
+          description: Task deleted
+        '403':
+          description: Forbidden
+        '404':
+          description: Not found
