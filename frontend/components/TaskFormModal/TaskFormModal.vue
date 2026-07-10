@@ -120,13 +120,4 @@ const saveTask = async () => {
 };
 </script>
 
-<style scoped>
-.modal-title {
-  margin-bottom: 1rem;
-}
-.modal-actions {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 1.5rem;
-}
-</style>
+<style src="./TaskFormModal.css" scoped></style>

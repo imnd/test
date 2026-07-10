@@ -45,38 +45,4 @@ const statusLabel = computed(() => {
 
 </script>
 
-<style scoped>
-.task-card {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-.task-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-}
-.task-title {
-  margin: 0;
-  font-size: 1.25rem;
-}
-.task-desc {
-  font-size: 0.95rem;
-  color: var(--color-text-muted);
-  margin-top: 0.5rem;
-}
-.task-card__meta {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  margin-top: 1rem;
-}
-.task-card__due {
-  font-size: 0.875rem;
-  color: var(--color-text-muted);
-}
-.task-card__actions {
-  display: flex;
-  gap: 0.5rem;
-}
-</style>
+<style src="./TaskCard.css" scoped></style>

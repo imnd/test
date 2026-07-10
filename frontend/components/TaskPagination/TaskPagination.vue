@@ -21,15 +21,4 @@ const onChange = (page: number) => {
 };
 </script>
 
-<style scoped>
-.pagination {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 1rem;
-  margin-top: 1.5rem;
-}
-.pagination-info {
-  color: var(--color-text-muted);
-}
-</style>
+<style src="./TaskPagination.css" scoped></style>

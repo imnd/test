@@ -63,10 +63,10 @@ import { ref, watch, onMounted } from 'vue';
 import { useRoute, useRouter } from '#app';
 import { useAuth } from '~/composables/useAuth';
 import { useApi } from '~/composables/useApi';
-import TaskCard from '~/components/TaskCard.vue';
-import TaskFormModal from '~/components/TaskFormModal.vue';
-import TaskFilters from '~/components/TaskFilters.vue';
-import TaskSorting from '~/components/TaskSorting.vue';
+import TaskCard from '~/components/TaskCard/TaskCard.vue';
+import TaskFormModal from '~/components/TaskFormModal/TaskFormModal.vue';
+import TaskFilters from '~/components/TaskFilters/TaskFilters.vue';
+import TaskSorting from '~/components/TaskSorting/TaskSorting.vue';
 import type { Task, PaginatedResponse } from '~/types';
 
 const auth = useAuth();
