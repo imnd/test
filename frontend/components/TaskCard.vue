@@ -20,24 +20,22 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { computed } from 'vue';
+import type { Task } from '~/types';
+import { formatDate } from '~/utils/formatters';
 
-const props = defineProps({
-  task: {
-    type: Object,
-    required: true
-  },
-  canEdit: {
-    type: Boolean,
-    default: false
-  }
+const props = withDefaults(defineProps<{
+  task: Task;
+  canEdit?: boolean;
+}>(), {
+  canEdit: false
 });
 
 defineEmits(['edit', 'delete']);
 
 const statusLabel = computed(() => {
-  const map = {
+  const map: Record<string, string> = {
     pending: 'Ожидает',
     in_progress: 'В процессе',
     completed: 'Завершено'

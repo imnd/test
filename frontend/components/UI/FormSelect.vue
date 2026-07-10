@@ -13,16 +13,18 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 defineOptions({
   inheritAttrs: false
 });
 
-defineProps({
-  label: String,
-  modelValue: [String, Number],
-  error: String
-});
+defineProps<{
+  label?: string;
+  modelValue?: string | number;
+  error?: string;
+}>();
 
-defineEmits(['update:modelValue']);
+defineEmits<{
+  'update:modelValue': [value: string]
+}>();
 </script>

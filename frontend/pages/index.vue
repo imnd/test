@@ -1,7 +1,9 @@
 <template>
   <div class="container">
     <header class="page-header">
-      <h1>Мои задачи <span v-if="auth.user.value?.is_admin" class="badge badge-in_progress ml-2">Admin</span></h1>
+      <h1>
+        Мои задачи <span v-if="auth.user.value?.is_admin" class="badge badge-in_progress ml-2">Admin</span>
+      </h1>
       <div class="page-header__actions">
         <button class="btn btn-primary" @click="openCreateModal">Новая задача</button>
         <button class="btn btn-outline" @click="auth.logout()">Выйти</button>
@@ -66,20 +68,21 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref, watch, onMounted } from 'vue';
 import { useRoute, useRouter } from '#app';
 import { useAuth } from '~/composables/useAuth';
 import { useApi } from '~/composables/useApi';
 import TaskCard from '~/components/TaskCard.vue';
 import TaskFormModal from '~/components/TaskFormModal.vue';
+import type { Task, PaginatedResponse } from '~/types';
 
 const auth = useAuth();
 const api = useApi();
 const route = useRoute();
 const router = useRouter();
 
-const tasks = ref([]);
+const tasks = ref<Task[]>([]);
 const loading = ref(true);
 
 const search = ref(route.query.search || '');
@@ -90,14 +93,14 @@ const initialSort = route.query.sort ? `${route.query.sort}-${route.query.dir}` 
 const sortBy = ref(validSorts.includes(initialSort) ? initialSort : 'created_at-desc');
 
 const isModalOpen = ref(false);
-const editingTask = ref(null);
+const editingTask = ref<Task | null>(null);
 
-let searchTimeout = null;
+let searchTimeout: ReturnType<typeof setTimeout> | null = null;
 
 const currentPage = ref(Number(route.query.page) || 1);
 const totalPages = ref(1);
 
-const changePage = (page) => {
+const changePage = (page: number) => {
   if (page < 1 || page > totalPages.value) return;
   currentPage.value = page;
   fetchTasks();
@@ -137,7 +140,7 @@ const fetchTasks = async (silent = false) => {
   }});
 
   try {
-    const res = await api.fetch(`/tasks?${queryParams.toString()}`);
+    const res = await api.fetch<PaginatedResponse<Task>>(`/tasks?${queryParams.toString()}`);
     tasks.value = res.data; // paginated response
     totalPages.value = res.last_page || 1;
   } catch (e) {
@@ -147,7 +150,7 @@ const fetchTasks = async (silent = false) => {
   }
 };
 
-const canEdit = (task) => {
+const canEdit = (task: Task) => {
   return auth.user.value?.is_admin || auth.user.value?.id === task.user_id;
 };
 
@@ -156,7 +159,7 @@ const openCreateModal = () => {
   isModalOpen.value = true;
 };
 
-const openEditModal = (task) => {
+const openEditModal = (task: Task) => {
   editingTask.value = { ...task };
   isModalOpen.value = true;
 };
@@ -165,12 +168,12 @@ const closeModal = () => {
   isModalOpen.value = false;
 };
 
-const deleteTask = async (id) => {
+const deleteTask = async (id: number) => {
   if (!confirm('Удалить эту задачу?')) return;
   try {
     await api.fetch(`/tasks/${id}`, { method: 'DELETE' });
     tasks.value = tasks.value.filter(t => t.id !== id);
-  } catch (e) {
+  } catch (e: any) {
     if (e.response?.status === 403) {
       alert('У вас нет прав для удаления этой задачи.');
     } else {

@@ -48,29 +48,31 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref, onMounted } from 'vue';
 import { useApi } from '~/composables/useApi';
+import type { Task } from '~/types';
 
-const props = defineProps({
-  task: {
-    type: Object,
-    default: null
-  }
-});
+const props = defineProps<{
+  task?: Task | null;
+}>();
 
-const emit = defineEmits(['close', 'saved']);
+const emit = defineEmits<{
+  close: [];
+  saved: [];
+}>();
+
 const api = useApi();
 
 const isEditing = ref(false);
 const loading = ref(false);
-const errors = ref({});
+const errors = ref<Record<string, string[]>>({});
 
 const form = ref({
   title: '',
   description: '',
   due_date: '',
-  status: 'pending'
+  status: 'pending' as Task['status']
 });
 
 onMounted(() => {
@@ -103,7 +105,7 @@ const saveTask = async () => {
     }
     emit('saved');
     emit('close');
-  } catch (e) {
+  } catch (e: any) {
     if (e.response && e.response.status === 422) {
       errors.value = e.response._data.errors;
     } else if (e.response?.status === 403) {

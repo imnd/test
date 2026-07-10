@@ -4,7 +4,7 @@ export const useApi = () => {
   const config = useRuntimeConfig();
   const token = useCookie('auth_token');
 
-  const fetch = async (endpoint: string, options: any = {}) => {
+  const fetch = async <T = any>(endpoint: string, options: any = {}): Promise<T> => {
     const currentToken = useCookie('auth_token').value;
     const headers = new Headers(options.headers || {});
     
@@ -14,7 +14,7 @@ export const useApi = () => {
     }
 
     try {
-      return await $fetch(`${config.public.apiBaseUrl}${endpoint}`, {
+      return await $fetch<T>(`${config.public.apiBaseUrl}${endpoint}`, {
         ...options,
         headers,
       });

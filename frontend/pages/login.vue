@@ -28,13 +28,14 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref } from 'vue';
 import { useAuth } from '~/composables/useAuth';
+import FormInput from "~/components/UI/FormInput.vue";
 
 const auth = useAuth();
 const form = ref({ email: '', password: '' });
-const errors = ref({});
+const errors = ref<Record<string, string[]>>({});
 const loading = ref(false);
 
 const handleLogin = async () => {

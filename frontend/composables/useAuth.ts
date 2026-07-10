@@ -1,14 +1,15 @@
 import { useState, useCookie, navigateTo } from '#app';
 import { useApi } from './useApi';
+import type { User, AuthResponse } from '~/types';
 
 export const useAuth = () => {
-  const user = useState('user', () => null);
+  const user = useState<User | null>('user', () => null);
   const token = useCookie('auth_token');
   const api = useApi();
 
   const login = async (credentials: any) => {
     try {
-      const response: any = await api.fetch('/auth/login', {
+      const response = await api.fetch<AuthResponse>('/auth/login', {
         method: 'POST',
         body: credentials,
       });
@@ -36,7 +37,7 @@ export const useAuth = () => {
   const fetchUser = async () => {
     if (!token.value) return null;
     try {
-      const data = await api.fetch('/user', {
+      const data = await api.fetch<User>('/user', {
         headers: { 'Authorization': `Bearer ${token.value}` }
       });
       user.value = data;

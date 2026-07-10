@@ -12,20 +12,21 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 defineOptions({
   inheritAttrs: false
 });
 
-defineProps({
-  label: String,
-  modelValue: [String, Number],
-  type: {
-    type: String,
-    default: 'text'
-  },
-  error: String
+withDefaults(defineProps<{
+  label?: string;
+  modelValue?: string | number;
+  type?: string;
+  error?: string;
+}>(), {
+  type: 'text'
 });
 
-defineEmits(['update:modelValue']);
+defineEmits<{
+  'update:modelValue': [value: string]
+}>();
 </script>
