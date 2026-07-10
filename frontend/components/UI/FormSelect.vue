@@ -1,13 +1,14 @@
 <template>
   <div class="form-group">
     <label v-if="label" class="form-label">{{ label }}</label>
-    <input 
-      :type="type" 
+    <select 
       :value="modelValue" 
-      @input="$emit('update:modelValue', $event.target.value)"
-      class="form-input"
+      @change="$emit('update:modelValue', $event.target?.value)"
+      class="form-select"
       v-bind="$attrs"
-    />
+    >
+      <slot></slot>
+    </select>
     <p v-if="error" class="error-text">{{ error }}</p>
   </div>
 </template>
@@ -17,14 +18,11 @@ defineOptions({
   inheritAttrs: false
 });
 
-withDefaults(defineProps<{
+defineProps<{
   label?: string;
   modelValue?: string | number;
-  type?: string;
   error?: string;
-}>(), {
-  type: 'text'
-});
+}>();
 
 defineEmits<{
   'update:modelValue': [value: string]

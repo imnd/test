@@ -3,6 +3,7 @@
 .env.backup
 .env.production
 .phpunit.result.cache
+/.idea
 /.phpunit.cache
 /auth.json
 /public/build

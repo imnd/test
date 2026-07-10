@@ -2,18 +2,18 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
-use OpenApi\Attributes as OA;
-use App\Models\Task;
 use App\Filters\TaskFilter;
-use App\Sorters\TaskSorter;
+use App\Filters\TaskSorter;
+use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreTaskRequest;
 use App\Http\Requests\UpdateTaskRequest;
+use App\Models\Task;
 use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Pagination\LengthAwarePaginator;
+use OpenApi\Attributes as OA;
 
 class TaskController extends Controller
 {
@@ -72,6 +72,9 @@ class TaskController extends Controller
         return response()->json($task, 201);
     }
 
+    /**
+     * @throws AuthorizationException
+     */
     #[OA\Get(
         path: "/api/tasks/{task}",
         summary: "Получение задачи",
@@ -88,6 +91,9 @@ class TaskController extends Controller
         return $task;
     }
 
+    /**
+     * @throws AuthorizationException
+     */
     #[OA\Put(
         path: "/api/tasks/{task}",
         summary: "Обновление задачи",
@@ -118,6 +124,9 @@ class TaskController extends Controller
         return $task;
     }
 
+    /**
+     * @throws AuthorizationException
+     */
     #[OA\Delete(
         path: "/api/tasks/{task}",
         summary: "Удаление задачи",
