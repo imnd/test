@@ -12,28 +12,16 @@
 
     <!-- Filters & Sorting -->
     <div class="surface filters-bar">
-      <div class="filter-group">
-        <label class="form-label">Поиск</label>
-        <input type="text" v-model="search" @input="debounceSearch" class="form-input" placeholder="Поиск по заголовку" />
-      </div>
-      <div class="filter-group">
-        <label class="form-label">Статус</label>
-        <select v-model="statusFilter" @change="resetPage" class="form-select">
-          <option value="">Все</option>
-          <option value="pending">Ожидает</option>
-          <option value="in_progress">В процессе</option>
-          <option value="completed">Завершено</option>
-        </select>
-      </div>
-      <div class="filter-group">
-        <label class="form-label">Сортировка</label>
-        <select v-model="sortBy" @change="resetPage" class="form-select">
-          <option value="created_at-desc">Сначала новые</option>
-          <option value="created_at-asc">Сначала старые</option>
-          <option value="due_date-asc">По дедлайну (сначала близкие)</option>
-          <option value="due_date-desc">По дедлайну (сначала дальние)</option>
-        </select>
-      </div>
+      <TaskFilters 
+        v-model:search="search" 
+        v-model:status="statusFilter"
+        @search-input="debounceSearch"
+        @status-change="resetPage"
+      />
+      <TaskSorting 
+        v-model="sortBy"
+        @change="resetPage"
+      />
     </div>
 
     <!-- Tasks List -->
@@ -75,6 +63,8 @@ import { useAuth } from '~/composables/useAuth';
 import { useApi } from '~/composables/useApi';
 import TaskCard from '~/components/TaskCard.vue';
 import TaskFormModal from '~/components/TaskFormModal.vue';
+import TaskFilters from '~/components/TaskFilters.vue';
+import TaskSorting from '~/components/TaskSorting.vue';
 import type { Task, PaginatedResponse } from '~/types';
 
 const auth = useAuth();
