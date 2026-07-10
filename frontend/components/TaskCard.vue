@@ -45,10 +45,6 @@ const statusLabel = computed(() => {
   return map[props.task.status] || props.task.status;
 });
 
-const formatDate = (dateStr) => {
-  if (!dateStr) return '';
-  return new Date(dateStr).toLocaleDateString('ru-RU');
-};
 </script>
 
 <style scoped>
