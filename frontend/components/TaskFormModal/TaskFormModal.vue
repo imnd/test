@@ -31,11 +31,8 @@
           label="Статус" 
           v-model="form.status" 
           :error="errors.status?.[0]"
-        >
-          <option value="pending">Ожидает</option>
-          <option value="in_progress">В процессе</option>
-          <option value="completed">Завершено</option>
-        </FormSelect>
+          :options="TASK_STATUS_OPTIONS"
+        />
 
         <div class="modal-actions">
           <button type="button" class="btn btn-outline" @click="$emit('close')">Отмена</button>
@@ -52,6 +49,7 @@
 import { ref, onMounted } from 'vue';
 import { useApi } from '~/composables/useApi';
 import type { Task } from '~/types';
+import { TASK_STATUS_OPTIONS } from '~/utils/constants';
 
 const props = defineProps<{
   task?: Task | null;
@@ -93,7 +91,7 @@ const saveTask = async () => {
   
   try {
     if (isEditing.value) {
-      await api.fetch(`/tasks/${props.task.id}`, {
+      await api.fetch(`/tasks/${props.task?.id}`, {
         method: 'PUT',
         body: form.value
       });

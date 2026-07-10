@@ -1,26 +1,6 @@
-<template>
-  <div class="filter-group">
-    <label class="form-label">Поиск</label>
-    <input 
-      type="text" 
-      :value="search" 
-      @input="onSearch" 
-      class="form-input" 
-      placeholder="Поиск по заголовку" 
-    />
-  </div>
-  <div class="filter-group">
-    <label class="form-label">Статус</label>
-    <select :value="status" @change="onStatus" class="form-select">
-      <option value="">Все</option>
-      <option value="pending">Ожидает</option>
-      <option value="in_progress">В процессе</option>
-      <option value="completed">Завершено</option>
-    </select>
-  </div>
-</template>
-
 <script setup lang="ts">
+import { TASK_STATUS_OPTIONS } from '~/utils/constants';
+
 defineProps<{
   search: string;
   status: string;
@@ -33,13 +13,29 @@ const emit = defineEmits<{
   'status-change': [];
 }>();
 
-const onSearch = (e: Event) => {
-  emit('update:search', (e.target as HTMLInputElement).value);
+const onSearch = (val: string) => {
+  emit('update:search', val);
   emit('search-input');
 };
 
-const onStatus = (e: Event) => {
-  emit('update:status', (e.target as HTMLSelectElement).value);
+const onStatus = (val: string) => {
+  emit('update:status', val);
   emit('status-change');
 };
 </script>
+
+<template>
+  <FormInput 
+    label="Поиск"
+    :model-value="search" 
+    @update:model-value="onSearch" 
+    placeholder="Поиск по заголовку" 
+  />
+  
+  <FormSelect 
+    label="Статус"
+    :model-value="status" 
+    @update:model-value="onStatus"
+    :options="[{ value: '', label: 'Все' }, ...TASK_STATUS_OPTIONS]"
+  />
+</template>

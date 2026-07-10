@@ -1,3 +1,23 @@
+<script setup lang="ts">
+import { ref } from 'vue';
+import { useAuth } from '~/composables/useAuth';
+
+const auth = useAuth();
+const form = ref({ email: '', password: '' });
+const errors = ref<Record<string, string[]>>({});
+const loading = ref(false);
+
+const handleLogin = async () => {
+  loading.value = true;
+  errors.value = {};
+  const res = await auth.login(form.value);
+  if (!res.success) {
+    errors.value = res.errors || {};
+  }
+  loading.value = false;
+};
+</script>
+
 <template>
   <div class="login-container">
     <div class="surface login-card">
@@ -27,27 +47,6 @@
     </div>
   </div>
 </template>
-
-<script setup lang="ts">
-import { ref } from 'vue';
-import { useAuth } from '~/composables/useAuth';
-import FormInput from "~/components/UI/FormInput.vue";
-
-const auth = useAuth();
-const form = ref({ email: '', password: '' });
-const errors = ref<Record<string, string[]>>({});
-const loading = ref(false);
-
-const handleLogin = async () => {
-  loading.value = true;
-  errors.value = {};
-  const res = await auth.login(form.value);
-  if (!res.success) {
-    errors.value = res.errors;
-  }
-  loading.value = false;
-};
-</script>
 
 <style scoped>
 .login-container {

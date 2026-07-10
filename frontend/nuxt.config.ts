@@ -8,5 +8,12 @@ export default defineNuxtConfig({
       apiBaseUrl: process.env.NUXT_PUBLIC_API_BASE_URL || 'http://localhost:8000/api',
     }
   },
+  components: [
+    {
+      path: '~/components/UI',
+      pathPrefix: false,
+    },
+    '~/components'
+  ],
   ssr: false, // SPA mode since we are authenticating via token
 })

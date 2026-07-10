@@ -3,6 +3,7 @@ import { describe, it, expect } from 'vitest'
 import TaskCard from './TaskCard.vue'
 
 import type { Task } from '~/types'
+import { TASK_STATUS_MAP } from '~/utils/constants'
 
 describe('TaskCard.vue', () => {
   const dummyTask: Task = {
@@ -26,8 +27,8 @@ describe('TaskCard.vue', () => {
 
     expect(wrapper.text()).toContain('Тестовая задача')
     expect(wrapper.text()).toContain('Описание тестовой задачи')
-    // Статус 'pending' должен мапиться в 'Ожидает'
-    expect(wrapper.text()).toContain('Ожидает')
+    // Статус 'pending' должен мапиться в соответствующее значение
+    expect(wrapper.text()).toContain(TASK_STATUS_MAP['pending'])
     expect(wrapper.text()).toContain('Дедлайн: 01.08.2026')
   })
 
