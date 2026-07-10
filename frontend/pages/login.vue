@@ -5,16 +5,20 @@
       <p class="login-subtitle">Войдите в систему</p>
       
       <form @submit.prevent="handleLogin">
-        <div class="form-group">
-          <label class="form-label">Email</label>
-          <input type="email" v-model="form.email" class="form-input" required />
-          <p v-if="errors.email" class="error-text">{{ errors.email[0] }}</p>
-        </div>
+        <FormInput 
+          label="Email" 
+          type="email" 
+          v-model="form.email" 
+          required 
+          :error="errors.email?.[0]" 
+        />
         
-        <div class="form-group">
-          <label class="form-label">Пароль</label>
-          <input type="password" v-model="form.password" class="form-input" required />
-        </div>
+        <FormInput 
+          label="Пароль" 
+          type="password" 
+          v-model="form.password" 
+          required 
+        />
 
         <button type="submit" class="btn btn-primary" style="width: 100%" :disabled="loading">
           {{ loading ? 'Загрузка...' : 'Войти' }}

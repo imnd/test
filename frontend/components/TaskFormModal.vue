@@ -4,33 +4,38 @@
       <h2 class="modal-title">{{ isEditing ? 'Редактировать задачу' : 'Новая задача' }}</h2>
       
       <form @submit.prevent="saveTask">
-        <div class="form-group">
-          <label class="form-label">Заголовок *</label>
-          <input type="text" v-model="form.title" class="form-input" required minlength="3" maxlength="255" />
-          <p v-if="errors.title" class="error-text">{{ errors.title[0] }}</p>
-        </div>
+        <FormInput 
+          label="Заголовок *" 
+          v-model="form.title" 
+          required 
+          minlength="3" 
+          maxlength="255" 
+          :error="errors.title?.[0]" 
+        />
 
-        <div class="form-group">
-          <label class="form-label">Описание</label>
-          <textarea v-model="form.description" class="form-textarea" rows="3"></textarea>
-          <p v-if="errors.description" class="error-text">{{ errors.description[0] }}</p>
-        </div>
+        <FormTextarea 
+          label="Описание" 
+          v-model="form.description" 
+          rows="3" 
+          :error="errors.description?.[0]" 
+        />
 
-        <div class="form-group">
-          <label class="form-label">Дедлайн</label>
-          <input type="date" v-model="form.due_date" class="form-input" />
-          <p v-if="errors.due_date" class="error-text">{{ errors.due_date[0] }}</p>
-        </div>
+        <FormInput 
+          label="Дедлайн" 
+          type="date" 
+          v-model="form.due_date" 
+          :error="errors.due_date?.[0]" 
+        />
 
-        <div class="form-group">
-          <label class="form-label">Статус</label>
-          <select v-model="form.status" class="form-select">
-            <option value="pending">Ожидает</option>
-            <option value="in_progress">В процессе</option>
-            <option value="completed">Завершено</option>
-          </select>
-          <p v-if="errors.status" class="error-text">{{ errors.status[0] }}</p>
-        </div>
+        <FormSelect 
+          label="Статус" 
+          v-model="form.status" 
+          :error="errors.status?.[0]"
+        >
+          <option value="pending">Ожидает</option>
+          <option value="in_progress">В процессе</option>
+          <option value="completed">Завершено</option>
+        </FormSelect>
 
         <div class="modal-actions">
           <button type="button" class="btn btn-outline" @click="$emit('close')">Отмена</button>

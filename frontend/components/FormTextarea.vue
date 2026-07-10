@@ -1,0 +1,26 @@
+<template>
+  <div class="form-group">
+    <label v-if="label" class="form-label">{{ label }}</label>
+    <textarea 
+      :value="modelValue" 
+      @input="$emit('update:modelValue', $event.target.value)"
+      class="form-textarea"
+      v-bind="$attrs"
+    ></textarea>
+    <p v-if="error" class="error-text">{{ error }}</p>
+  </div>
+</template>
+
+<script setup>
+defineOptions({
+  inheritAttrs: false
+});
+
+defineProps({
+  label: String,
+  modelValue: [String, Number],
+  error: String
+});
+
+defineEmits(['update:modelValue']);
+</script>
