@@ -11,7 +11,6 @@ const auth = useAuth();
 
 import { useTaskStore } from '~/stores/tasks';
 const taskStore = useTaskStore();
-
 const isModalOpen = ref(false);
 const editingTask = ref<Task | null>(null);
 
@@ -27,9 +26,9 @@ const openEditModal = (task: Task) => {
 
 const closeModal = () => isModalOpen.value = false;
 
-onMounted(() => {
+onMounted(async () => {
   auth.fetchUser();
-  taskStore.loadTasks();
+  await taskStore.loadTasks();
 });
 </script>
 
@@ -52,7 +51,7 @@ onMounted(() => {
     </div>
 
     <!-- Tasks List -->
-    <div v-if="taskStore.loading && taskStore.tasks.length === 0" class="state-message">
+    <div v-if="taskStore.loading" class="state-message">
       Загрузка задач...
     </div>
     <div v-else-if="taskStore.tasks.length === 0" class="surface state-message">

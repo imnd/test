@@ -6,7 +6,7 @@ import { useRoute, useRouter } from '#app';
 
 export const useTaskStore = defineStore('tasks', () => {
   const tasks = ref<Task[]>([]);
-  const loading = ref(false);
+  const loading = ref(true);
   const totalPages = ref(1);
   const api = useApi();
 
