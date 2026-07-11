@@ -1,40 +1,37 @@
 <script setup lang="ts">
 import { TASK_STATUS_OPTIONS } from '~/utils/constants';
+import { useTaskStore } from '~/stores/tasks';
 
-defineProps<{
-  search: string;
-  status: string;
-}>();
+const taskStore = useTaskStore();
 
-const emit = defineEmits<{
-  'update:search': [value: string];
-  'update:status': [value: string];
-  'search-input': [];
-  'status-change': [];
-}>();
+let searchTimeout: ReturnType<typeof setTimeout> | null = null;
 
 const onSearch = (val: string) => {
-  emit('update:search', val);
-  emit('search-input');
+  taskStore.search = val;
+  
+  if (searchTimeout) {
+    clearTimeout(searchTimeout);
+  }
+  searchTimeout = setTimeout(() => taskStore.resetPage(), 500);
 };
 
 const onStatus = (val: string) => {
-  emit('update:status', val);
-  emit('status-change');
+  taskStore.statusFilter = val;
+  taskStore.resetPage();
 };
 </script>
 
 <template>
   <FormInput 
     label="Поиск"
-    :model-value="search" 
+    :model-value="taskStore.search" 
     @update:model-value="onSearch" 
     placeholder="Поиск по заголовку" 
   />
   
   <FormSelect 
     label="Статус"
-    :model-value="status" 
+    :model-value="taskStore.statusFilter" 
     @update:model-value="onStatus"
     :options="[{ value: '', label: 'Все' }, ...TASK_STATUS_OPTIONS]"
   />

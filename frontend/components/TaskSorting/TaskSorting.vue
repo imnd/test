@@ -1,7 +1,7 @@
 <template>
   <div class="filter-group">
     <label class="form-label">Сортировка</label>
-    <select :value="modelValue" @change="onChange" class="form-select">
+    <select :value="taskStore.sortBy" @change="onChange" class="form-select">
       <option value="created_at-desc">Сначала новые</option>
       <option value="created_at-asc">Сначала старые</option>
       <option value="due_date-asc">По дедлайну (сначала близкие)</option>
@@ -11,17 +11,12 @@
 </template>
 
 <script setup lang="ts">
-defineProps<{
-  modelValue: string;
-}>();
+import { useTaskStore } from '~/stores/tasks';
 
-const emit = defineEmits<{
-  'update:modelValue': [value: string];
-  'change': [];
-}>();
+const taskStore = useTaskStore();
 
 const onChange = (e: Event) => {
-  emit('update:modelValue', (e.target as HTMLSelectElement).value);
-  emit('change');
+  taskStore.sortBy = (e.target as HTMLSelectElement).value;
+  taskStore.resetPage();
 };
 </script>

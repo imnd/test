@@ -47,7 +47,7 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
-import { useApi } from '~/composables/useApi';
+import { useTaskActions } from '~/composables/useTaskActions';
 import type { Task } from '~/types';
 import { TASK_STATUS_OPTIONS } from '~/utils/constants';
 
@@ -60,7 +60,7 @@ const emit = defineEmits<{
   saved: [];
 }>();
 
-const api = useApi();
+const { saveTask: apiSaveTask } = useTaskActions();
 
 const isEditing = ref(false);
 const loading = ref(false);
@@ -89,31 +89,15 @@ const saveTask = async () => {
   loading.value = true;
   errors.value = {};
   
-  try {
-    if (isEditing.value) {
-      await api.fetch(`/tasks/${props.task?.id}`, {
-        method: 'PUT',
-        body: form.value
-      });
-    } else {
-      await api.fetch('/tasks', {
-        method: 'POST',
-        body: form.value
-      });
-    }
+  const { success, errors: apiErrors } = await apiSaveTask(isEditing.value ? props.task?.id : undefined, form.value);
+  
+  loading.value = false;
+  
+  if (success) {
     emit('saved');
     emit('close');
-  } catch (e: unknown) {
-    const err = e as { response?: { status: number; _data?: { errors: Record<string, string[]> } } };
-    if (err.response && err.response.status === 422) {
-      errors.value = err.response._data?.errors || {};
-    } else if (err.response?.status === 403) {
-      alert('У вас нет прав для сохранения этой задачи.');
-    } else {
-      alert('Произошла ошибка при сохранении. Попробуйте позже.');
-    }
-  } finally {
-    loading.value = false;
+  } else if (apiErrors) {
+    errors.value = apiErrors;
   }
 };
 </script>
