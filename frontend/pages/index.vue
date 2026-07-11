@@ -27,9 +27,9 @@ const openEditModal = (task: Task) => {
 
 const closeModal = () => isModalOpen.value = false;
 
-onMounted(async () => {
-  await auth.fetchUser();
-  auth.user.value && await taskStore.loadTasks();
+onMounted(() => {
+  auth.fetchUser();
+  taskStore.loadTasks();
 });
 </script>
 
@@ -56,7 +56,7 @@ onMounted(async () => {
       Загрузка задач...
     </div>
     <div v-else-if="taskStore.tasks.length === 0" class="surface state-message">
-      <p>Задачи не найдены.</p>
+      Задачи не найдены.
     </div>
     <div v-else class="task-list" :class="{ 'is-loading': taskStore.loading }">
       <TaskCard
