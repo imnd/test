@@ -51,16 +51,18 @@ import { useTaskActions } from '~/composables/useTaskActions';
 import type { Task } from '~/types';
 import { TASK_STATUS_OPTIONS } from '~/utils/constants';
 
+import { useTaskStore } from '~/stores/tasks';
+
 const props = defineProps<{
   task?: Task | null;
 }>();
 
 const emit = defineEmits<{
   close: [];
-  saved: [];
 }>();
 
 const { saveTask: apiSaveTask } = useTaskActions();
+const taskStore = useTaskStore();
 
 const isEditing = ref(false);
 const loading = ref(false);
@@ -89,12 +91,12 @@ const saveTask = async () => {
   loading.value = true;
   errors.value = {};
   
-  const { success, errors: apiErrors } = await apiSaveTask(isEditing.value ? props.task?.id : undefined, form.value);
+  const { success, data, errors: apiErrors } = await apiSaveTask(isEditing.value ? props.task?.id : undefined, form.value);
   
   loading.value = false;
   
-  if (success) {
-    emit('saved');
+  if (success && data) {
+    taskStore.updateTaskInStore(data);
     emit('close');
   } else if (apiErrors) {
     errors.value = apiErrors;

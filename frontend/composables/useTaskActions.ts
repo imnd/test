@@ -19,13 +19,13 @@ export const useTaskActions = () => {
     }
   };
 
-  const createTask = async (payload: Partial<Task>): Promise<{ success: boolean; errors?: Record<string, string[]> }> => {
+  const createTask = async (payload: Partial<Task>): Promise<{ success: boolean; data?: Task; errors?: Record<string, string[]> }> => {
     try {
-      await api.fetch('/tasks', {
+      const data = await api.fetch<Task>('/tasks', {
         method: 'POST',
         body: payload
       });
-      return { success: true };
+      return { success: true, data };
     } catch (e: unknown) {
       const err = e as { response?: { status: number; _data?: { errors: Record<string, string[]> } } };
       if (err.response && err.response.status === 422) {
@@ -40,13 +40,13 @@ export const useTaskActions = () => {
     }
   };
 
-  const updateTask = async (id: number, payload: Partial<Task>): Promise<{ success: boolean; errors?: Record<string, string[]> }> => {
+  const updateTask = async (id: number, payload: Partial<Task>): Promise<{ success: boolean; data?: Task; errors?: Record<string, string[]> }> => {
     try {
-      await api.fetch(`/tasks/${id}`, {
+      const data = await api.fetch<Task>(`/tasks/${id}`, {
         method: 'PUT',
         body: payload
       });
-      return { success: true };
+      return { success: true, data };
     } catch (e: unknown) {
       const err = e as { response?: { status: number; _data?: { errors: Record<string, string[]> } } };
       if (err.response && err.response.status === 422) {

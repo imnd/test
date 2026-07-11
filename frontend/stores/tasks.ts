@@ -79,6 +79,17 @@ export const useTaskStore = defineStore('tasks', () => {
     loadTasks();
   };
 
+  const updateTaskInStore = (updatedTask: Task) => {
+    const index = tasks.value.findIndex(t => t.id === updatedTask.id);
+    if (index !== -1) {
+      tasks.value[index] = updatedTask;
+    } else {
+      // If it's a new task, we might want to unshift it or just reload.
+      // Since the user is just editing, this is fine. For new tasks we'll put it at the top.
+      tasks.value.unshift(updatedTask);
+    }
+  };
+
   return {
     tasks,
     loading,
@@ -89,6 +100,7 @@ export const useTaskStore = defineStore('tasks', () => {
     currentPage,
     loadTasks,
     removeTask,
+    updateTaskInStore,
     changePage,
     resetPage,
   };
