@@ -18,7 +18,7 @@ class TaskSorter
     {
         $sort = $this->request->input('sort', 'created_at');
         $dir = $this->request->input('dir', 'desc');
-        $builder->orderBy($sort, $dir);
+        $builder->orderBy($sort, $dir)->orderBy('id', $dir);
 
         return $builder;
     }
