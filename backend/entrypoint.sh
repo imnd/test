@@ -2,7 +2,7 @@
 
 # Ожидание поднятия MySQL
 echo "Waiting for database..."
-while ! mysqladmin ping -h"db" -uroot -proot --silent; do
+while ! mysqladmin ping -h"db" -uroot -proot --ssl=0 --silent; do
     sleep 2
 done
 
